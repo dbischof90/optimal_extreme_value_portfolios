@@ -9,12 +9,12 @@ class Profile(object):
     SET = "full"
     IND_REG = 2
     IND_HIDDEN = 3
-    NUM_OF_ASSETS = 2
+    SCALES = {'first': [1, 1],
+              'second': [1.3, 0.8]}
+    NUM_OF_ASSETS = len(SCALES['first'])
     TYPICAL = (4, 90)
     FIRSTORDER = False
     SINGLEFACTOR = True
-    SCALES = {'first': [1, 1],
-              'second': [1.3, 0.8]}
     RESULTINFORMATION = {}
 
 class HiddenRegularInformation(object):

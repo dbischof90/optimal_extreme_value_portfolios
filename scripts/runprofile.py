@@ -1,30 +1,13 @@
 
-from time import time
 from datetime import datetime, timedelta
-from tabulate import tabulate
+from time import time
+from numba import jit
 from models.analytical import SurrogateMixPortfolio
 from models.common.structs import HiddenRegularInformation, ParameterForPortfolio
 from models.empirical import EmpiricalPortfolio
 
 
-def giveInfos(listOfProfiles, numWorkers):
-
-    infoString = []
-    for profile in listOfProfiles:
-        infoString.append(tabulate([["Name:", profile.NAME],
-                      ["Steps to calculate:", profile.RES],
-                      ["Sample size:", profile.SAMPLESIZE],
-                      ["Used risk measures:", ', '.join(profile.RISKMEASURES)]], tablefmt="simple"))
-        infoString.append('\n')
-
-    if numWorkers > 1:
-        numProcesses = "Jobs splitted to " + str(numWorkers) + " cores"
-    else:
-        numProcesses = "Single-core execution"
-    print('New profiles in queue:\n' + ''.join(infoString) +
-          '\nTotal number: ' + str(len(listOfProfiles)) +
-          '\n' + numProcesses + '\n')
-
+@jit
 def runProfile(profile):
     print("Profile \'" + profile.NAME + "\' launched at " + str((datetime.now()).replace(microsecond=0))[11:] + ".")
     startTotal = time()
@@ -72,7 +55,7 @@ def runProfile(profile):
                         print("Warning: Process \'" + profile.NAME + "\' failed to find optimal value at level " + str(round(level, 2)) + ".")
                         noPortfolio.append(level)
 
-            if step > profile.BURNIN:
+            if step >= profile.BURNIN:
                 analyticalOptimalPortfolios.append(analyticalPortfolio.optimalPortfolio)
                 empiricalOptimalPortfolios.append(empiricalPortfolio.optimalPortfolio)
             if not (step + 1) % round((profile.RES + profile.BURNIN)/5):
@@ -83,9 +66,10 @@ def runProfile(profile):
 
         results[measure]["analytical"] = analyticalOptimalPortfolios
         results[measure]["empirical"] = empiricalOptimalPortfolios
-        profile.RESULTINFORMATION[measure]["Analytical Recalibration"] = recalCountAna
-        profile.RESULTINFORMATION[measure]["Empirical Recalibration"] = recalCountEmp
-        profile.RESULTINFORMATION[measure]["No Portfolio"] = noPortfolio
+        profile.RESULTINFORMATION[measure]["restart_analytical"] = recalCountAna
+        profile.RESULTINFORMATION[measure]["restart_empirical"] = recalCountEmp
+        profile.RESULTINFORMATION[measure]["no_portfolio"] = noPortfolio
+        profile.RESULTINFORMATION[measure]["average_speed"] = (profile.RES + profile.BURNIN)/(time() - startTotal)
 
     print("Profile \'" + profile.NAME + "\' completed. Total time: " + str(round(time() - startTotal, 2)) + " seconds.")
     return dict(data=results, profile=profile)
