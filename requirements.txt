@@ -1,0 +1,9 @@
+#
+### Required packages to install
+#
+#
+numpy
+scipy
+matplotlib
+tabulate
+
