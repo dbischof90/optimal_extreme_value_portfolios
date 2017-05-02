@@ -6,18 +6,18 @@ from scripts.analyze import plotPortfolioWeights
 from scripts.runprofile import runProfile
 
 profile1 = Profile()
-profile1.SAMPLESIZE = 50000
+profile1.SAMPLESIZE = 500000
 profile1.NAME = "Two assets, full"
-profile1.RES = 50
+profile1.RES = 500
 profile1.RISKMEASURES = ["ES", "VaR"]
 profile1.SET = "full"
 profile1.BURNIN = 20
 profile1.SCALES = {'first': [1, 1], 'second': [1.3, 0.8]}
 
 profile2 = Profile()
-profile2.SAMPLESIZE = 50000
+profile2.SAMPLESIZE = 500000
 profile2.NAME = "Two assets, mixed"
-profile2.RES = 50
+profile2.RES = 500
 profile2.RISKMEASURES = ["ES", "VaR"]
 profile2.SET = "mixed"
 profile2.BURNIN = 20
