@@ -1,5 +1,5 @@
 install:
-  pip3 install -r requirements.txt
+	pip3 install -r requirements.txt
 
 run:
-  python3 ./samples/thesis.py
+	python3 -m samples.reference.py
