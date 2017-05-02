@@ -6,4 +6,4 @@ numpy
 scipy
 matplotlib
 tabulate
-
+numba
