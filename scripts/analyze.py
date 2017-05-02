@@ -21,6 +21,7 @@ def plotPortfolioWeights(results):
             ax.plot([e.x for e in simulation["data"][measure]["empirical"]])
             ax.set_xticks([x * simulation["profile"].RES / 10 for x in range(11)])
             ax.set_xticklabels([simulation["profile"].STARTVAR + x for x in range(11)])
+            fig.show()
 
 
 def plotPortfolioValues(results):
@@ -36,6 +37,7 @@ def plotPortfolioValues(results):
             ax.plot([e.fun for e in simulation["data"][measure]["empirical"]])
             ax.set_xticks([x * simulation["profile"].RES / 10 for x in range(11)])
             ax.set_xticklabels([simulation["profile"].STARTVAR + x for x in range(11)])
+            fig.show()
 
 
 
